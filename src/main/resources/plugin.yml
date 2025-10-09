@@ -1,0 +1,9 @@
+name: InventoryView
+version: '1.0'
+main: ollie.inventoryView.InventoryView
+api-version: '1.21'
+
+commands:
+  view:
+    description: Control another player's inventory
+    usage: /view <player>
