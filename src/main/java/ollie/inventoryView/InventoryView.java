@@ -34,7 +34,8 @@ public final class InventoryView extends JavaPlugin implements Listener {
                 if (args.length == 1) {
                     List<String> playerNames = new ArrayList<>();
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        playerNames.add(player.getName());
+                        if (player.getName().toLowerCase().startsWith(args[0].toLowerCase()))
+                            playerNames.add(player.getName());
                     }
                     return playerNames;
                 }
