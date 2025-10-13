@@ -1,6 +1,7 @@
 package ollie.inventoryView;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -8,9 +9,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -55,8 +54,18 @@ public final class InventoryView extends JavaPlugin implements Listener {
         ItemStack clickedItem = e.getCurrentItem();
         ItemMeta clickedItemMeta = null;
 
+        if (e.getView().getTitle().endsWith("'s Inventory") && e.getClick() == ClickType.DOUBLE_CLICK) {
+            e.setCancelled(true);
+        }
+
         if (clickedItem != null) {
             clickedItemMeta = clickedItem.getItemMeta();
+        }
+
+        if (e.getView().getTitle().startsWith(viewer.getName()) && e.getClick() == ClickType.DOUBLE_CLICK) {
+            e.setCancelled(true);
+            viewer.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "[INVENTORYVIEW] Can't stack using double click in /view whilst viewing own inventory");
+            return;
         }
 
         if (e.getView().getTitle().endsWith("'s Inventory")) {
@@ -68,6 +77,12 @@ public final class InventoryView extends JavaPlugin implements Listener {
                         viewer.setItemOnCursor(null);
                     }
                 }
+                return;
+            }
+
+            if (e.getClick() == ClickType.DOUBLE_CLICK) {
+                e.setCancelled(true);
+                viewer.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "[INVENTORYVIEW] Can't stack using double click in /view");
                 return;
             }
 
@@ -171,7 +186,7 @@ public final class InventoryView extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onInventoryDrag(InventoryDragEvent e) { // need to make it so it works nicely and doesnt randomly delete
+    public void onInventoryDrag(InventoryDragEvent e) {
         Player viewer = (Player) e.getWhoClicked();
         Player target = getTargetFromViewer(viewer);
         if (target == null)

@@ -2,6 +2,7 @@ package ollie.inventoryView;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,12 +32,12 @@ public class ViewCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player viewer = (Player) sender;
         if (!sender.isOp()) {
-            sender.sendMessage(ChatColor.RED + "Op is required");
+            sender.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "[VIEWINVENTORY] Op is required");
             return true;
         }
 
         if (args.length == 0) {
-            viewer.sendMessage(ChatColor.RED + "A player name is needed");
+            viewer.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "[VIEWINVENTORY] A player name is needed");
             return true;
         }
 
@@ -45,13 +46,18 @@ public class ViewCommand implements CommandExecutor {
             openViewer(viewer, target);
         }
         else {
-            viewer.sendMessage(ChatColor.RED + "Invalid Player");
+            viewer.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "[VIEWINVENTORY] Invalid Player");
         }
 
         return true;
     }
 
     public static void openViewer(Player viewer, Player target) {
+        if (viewer.getGameMode() == GameMode.SPECTATOR) {
+            viewer.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "[VIEWINVENTORY] Can't use this command in spectator mode due to read only restrictions set in Minecraft");
+            return;
+        }
+
         Inventory viewInventory = Bukkit.createInventory(null, 54, String.format("%s's Inventory", target.getName()));
         PlayerInventory targetInventory = target.getInventory();
 
@@ -84,6 +90,7 @@ public class ViewCommand implements CommandExecutor {
 
 
         InventoryView.targetViewersMap.computeIfAbsent(target.getUniqueId(), uuid -> new ArrayList<>()).add(viewer.getUniqueId());
+
         viewer.openInventory(viewInventory);
     }
 

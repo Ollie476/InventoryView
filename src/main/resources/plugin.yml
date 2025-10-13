@@ -1,5 +1,5 @@
 name: InventoryView
-version: '1.0'
+version: '1.1'
 main: ollie.inventoryView.InventoryView
 api-version: '1.21'
 
