@@ -238,6 +238,8 @@ public final class InventoryView extends JavaPlugin implements Listener {
     @EventHandler
     public void onEntityRightClick(PlayerInteractAtEntityEvent e) {
         Player viewer = e.getPlayer();
+        if (!viewer.isOp())
+            return;
 
         if (viewer.isSneaking() && e.getRightClicked() instanceof Player target) {
             ViewCommand.openViewer(viewer, target);
