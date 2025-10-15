@@ -55,10 +55,6 @@ public final class InventoryView extends JavaPlugin implements Listener {
         ItemStack clickedItem = e.getCurrentItem();
         ItemMeta clickedItemMeta = null;
 
-        if (e.getView().getTitle().endsWith("'s Inventory") && e.getClick() == ClickType.DOUBLE_CLICK) {
-            e.setCancelled(true);
-        }
-
         if (clickedItem != null) {
             clickedItemMeta = clickedItem.getItemMeta();
         }

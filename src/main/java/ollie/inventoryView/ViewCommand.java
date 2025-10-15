@@ -54,8 +54,7 @@ public class ViewCommand implements CommandExecutor {
 
     public static void openViewer(Player viewer, Player target) {
         if (viewer.getGameMode() == GameMode.SPECTATOR) {
-            viewer.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "[VIEWINVENTORY] Can't use this command in spectator mode due to read only restrictions set in Minecraft");
-            return;
+            viewer.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "[VIEWINVENTORY] Can't add to your inventory using this command in spectator mode due to read only restrictions set in Minecraft");
         }
 
         Inventory viewInventory = Bukkit.createInventory(null, 54, String.format("%s's Inventory", target.getName()));
